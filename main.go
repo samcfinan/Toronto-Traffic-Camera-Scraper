@@ -10,6 +10,8 @@ import (
 	"os"
 	"strings"
 	"sync"
+
+	"github.com/jsonlvhit/gocron"
 )
 
 type Camera struct {
@@ -26,6 +28,8 @@ func main() {
 	reader := csv.NewReader(bufio.NewReader(csvFile))
 
 	var cameras []Camera
+
+	gocron.Every(1).Second().Do(fmt.Println("test"))
 
 	for {
 		line, error := reader.Read()
@@ -45,7 +49,6 @@ func main() {
 	}
 
 	wg.Wait()
-
 }
 
 func downloadImg(camera Camera, w *sync.WaitGroup) {
