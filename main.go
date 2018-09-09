@@ -11,12 +11,16 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/jsonlvhit/gocron"
+	"github.com/jasonlvhit/gocron"
 )
 
 type Camera struct {
 	Camera string
 	URL    string
+}
+
+func task() {
+	fmt.Println("test")
 }
 
 func main() {
@@ -29,7 +33,7 @@ func main() {
 
 	var cameras []Camera
 
-	gocron.Every(1).Second().Do(fmt.Println("test"))
+	gocron.Every(1).Second().Do(task)
 
 	for {
 		line, error := reader.Read()
@@ -62,10 +66,10 @@ func downloadImg(camera Camera, w *sync.WaitGroup) {
 	defer response.Body.Close()
 
 	if response.Header.Get("Content-Type") != "image/jpeg" {
-		fmt.Printf("Not found: %s", camera.Camera)
+		fmt.Printf("Not found: %s\n", camera.Camera)
 	}
 
-	file, err := os.Create(fmt.Sprintf("./cameras/%s.jpg\n", camera.Camera))
+	file, err := os.Create(fmt.Sprintf("./cameras/%s.jpg", camera.Camera))
 	if err != nil {
 		w.Done()
 		return
